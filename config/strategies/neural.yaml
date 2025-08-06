@@ -1,0 +1,13 @@
+strategy_name: dtw_neural
+threshold:
+  dtw: 2.0
+  confidence: 0.7
+positioning:
+  base_size: 0.1
+  max_size: 0.25
+take_profit:
+  multiplier: 2.5
+model:
+  path: models/dtw_predictor.h5
+risk:
+  stop_system: hybrid

@@ -1,0 +1,30 @@
+# Core dependencies
+numpy
+pandas
+scipy
+tensorflow
+fastdtw
+
+# ML & serialization
+h5py
+keras
+flatbuffers
+ml-dtypes
+gast
+libclang
+
+# Auth & API tools
+google-auth
+google-auth-oauthlib
+grpcio
+absl-py
+cachetools
+
+# Utilities
+certifi
+idna
+charset-normalizer
+astunparse
+google-pasta
+Markdown
+MarkupSafe

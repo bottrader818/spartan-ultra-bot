@@ -1,0 +1,32 @@
+class AlpacaEnhancedClient:
+    def __init__(self, api_key: str, secret_key: str, paper: bool = True):
+        self.base_url = 'https://api.alpaca.markets' if not paper else 'https://paper-api.alpaca.markets'
+        self._init_clients(api_key, secret_key)
+        self._setup_state_management()
+        
+    def _init_clients(self, api_key: str, secret_key: str):
+        """Initialize API clients with retry logic"""
+        self.rest = tradeapi.REST(api_key, secret_key, 
+                                base_url=self.base_url,
+                                retries=3,
+                                retry_delay=1)
+        self.ws = tradeapi.Stream(api_key, secret_key,
+                                base_url=self.base_url)
+    
+    async def maintain_websocket(self):
+        """Enhanced with exponential backoff and health checks"""
+        retry_count = 0
+        max_retries = 5
+        while True:
+            try:
+                async with self._connection_lock:
+                    if not self._connection_healthy():
+                        await self._reconnect()
+                    await self._process_messages()
+                retry_count = 0
+            except Exception as e:
+                retry_count += 1
+                if retry_count >= max_retries:
+                    raise ConnectionError("Max reconnection attempts reached")
+                delay = min(2 ** retry_count, 30)  # Exponential backoff capped at 30s
+                await asyncio.sleep(delay)
