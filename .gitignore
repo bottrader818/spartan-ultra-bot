@@ -1,29 +1,12 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Virtualenv
-venv/
-.env
-
-# Models
-models/*.h5
-models/*.pkl
-
-# OS-specific
-.DS_Store
-
-# IDEs
-.vscode/
-.idea/
-
-# Tests / Reports
-htmlcov/
-*.log
-
-# Docker
-*.tar
+# Auto-generated files
+.autobackups/
 *.bak
-*.swp
+
+# System files
+core/etc/
+core/bin/
+core/sbin/
+
+# Python cache
+__pycache__/
+*.py[cod]
