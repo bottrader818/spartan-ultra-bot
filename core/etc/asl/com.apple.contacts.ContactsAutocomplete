@@ -1,0 +1,6 @@
+> /var/log/com.apple.contacts.ContactsAutocomplete mode=0750
+? [= Facility com.apple.contacts.ContactsAutocomplete] claim only
+? [= Facility com.apple.contacts.ContactsAutocomplete] [= Category Debug] file /var/log/com.apple.contacts.ContactsAutocomplete/Debug.log rotate=Debug.local.log ttl=7 file_max=10M all_max=200M compress fmt='$(Time) $(Host) $(Sender)[$(PID):$(ThreadID)] <$((Level)(str))>: $(Function):$(Line) | $(Message)'
+? [= Facility com.apple.contacts.ContactsAutocomplete] [= Category Performance] file /var/log/com.apple.contacts.ContactsAutocomplete/Performance.log rotate=Performance.local.log ttl=7 file_max=10M all_max=200M compress fmt='$(Time) $(Host) $(Sender)[$(PID):$(ThreadID)] <$((Level)(str))>: $(Function):$(Line) | $(Message)'
+? [= Facility com.apple.contacts.ContactsAutocomplete] [= Category Sorting] file /var/log/com.apple.contacts.ContactsAutocomplete/Sorting.log rotate=Sorting.local.log ttl=7 file_max=10M all_max=200M compress fmt='$(Time) $(Host) $(Sender)[$(PID):$(ThreadID)] <$((Level)(str))>: $(Function):$(Line) | $(Message)'
+? [= Facility com.apple.contacts.ContactsAutocomplete] [= Category Probes] file /var/log/com.apple.contacts.ContactsAutocomplete/Probes.log rotate=Probes.local.log ttl=7 file_max=10M all_max=200M compress fmt='$(Time) $(Host) $(Sender)[$(PID):$(ThreadID)] <$((Level)(str))>: $(Function):$(Line) | $(Message)'

@@ -1,0 +1,5 @@
+from core.execution.smart_order_router import SmartOrderRouter
+
+class AdaptiveRouter(SmartOrderRouter):
+    """Shim for tests: uses SmartOrderRouter behavior."""
+    pass

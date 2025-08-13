@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>InstalledPrinters</key>
+	<array>
+		<string>MANUFACTURER:1507;MODEL:1542</string>
+		<string>MANUFACTURER:2362;MODEL:9522</string>
+		<string>MANUFACTURER:ALCOR;MODEL:USB Hub 2.0</string>
+		<string>MANUFACTURER:PixArt;MODEL:Gaming Mouse</string>
+	</array>
+	<key>Manufacturers</key>
+	<array>
+		<string>1507</string>
+		<string>2362</string>
+		<string>ALCOR</string>
+		<string>PixArt</string>
+	</array>
+</dict>
+</plist>

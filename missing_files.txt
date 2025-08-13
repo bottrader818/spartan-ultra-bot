@@ -1,0 +1,19 @@
+Only in /Users/d.j.lewis/Desktop/quant_bot_pro_backup/core: .DS_Store
+Only in /Users/d.j.lewis/Documents/spartan-ultra-bot/core: Applications
+Only in /Users/d.j.lewis/Documents/spartan-ultra-bot/core: Library
+Only in /Users/d.j.lewis/Desktop/quant_bot_pro_backup/core: __pycache__
+Only in /Users/d.j.lewis/Documents/spartan-ultra-bot/core: bin
+Only in /Users/d.j.lewis/Documents/spartan-ultra-bot/core: compliance
+Only in /Users/d.j.lewis/Documents/spartan-ultra-bot/core: cores
+Only in /Users/d.j.lewis/Documents/spartan-ultra-bot/core: dev
+Only in /Users/d.j.lewis/Desktop/quant_bot_pro_backup/core/engine: main_engine.py
+Only in /Users/d.j.lewis/Documents/spartan-ultra-bot/core: etc
+Only in /Users/d.j.lewis/Desktop/quant_bot_pro_backup/core/execution: __pycache__
+Only in /Users/d.j.lewis/Documents/spartan-ultra-bot/core: home
+Only in /Users/d.j.lewis/Documents/spartan-ultra-bot/core/risk: __pycache__
+Only in /Users/d.j.lewis/Documents/spartan-ultra-bot/core/risk: stop_system.py
+Files /Users/d.j.lewis/Documents/spartan-ultra-bot/core/strategies/__pycache__/dtw_neural.cpython-313.pyc and /Users/d.j.lewis/Desktop/quant_bot_pro_backup/core/strategies/__pycache__/dtw_neural.cpython-313.pyc differ
+Files /Users/d.j.lewis/Documents/spartan-ultra-bot/core/strategies/dtw_mean_reversion_strategy.py and /Users/d.j.lewis/Desktop/quant_bot_pro_backup/core/strategies/dtw_mean_reversion_strategy.py differ
+Only in /Users/d.j.lewis/Desktop/quant_bot_pro_backup/core/strategies: dtw_mean_reversion_strategy.py.bak.025202
+Files /Users/d.j.lewis/Documents/spartan-ultra-bot/core/strategies/dtw_neural.py and /Users/d.j.lewis/Desktop/quant_bot_pro_backup/core/strategies/dtw_neural.py differ
+Only in /Users/d.j.lewis/Desktop/quant_bot_pro_backup/core/strategies: utils

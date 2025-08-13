@@ -1,0 +1,9 @@
+= enable [File /private/var/root/.mkb_debug]
+
+> /private/var/log/keybagd.log
+? [= Sender kernel] [CA= Message SEP] file keybagd.log
+? [= Sender SpringBoard] [CS= Message MC:] file keybagd.log
+? [= Sender SpringBoard] [CS= Message secure lock screen] file keybagd.log
+? [= Sender backboardd] [CA= Message MultitouchHID] file keybagd.log
+? [= Sender profiled] file keybagd.log
+? [= Sender mdmd] file keybagd.log

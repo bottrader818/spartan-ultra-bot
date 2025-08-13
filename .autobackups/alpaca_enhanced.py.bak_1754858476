@@ -1,0 +1,4 @@
+try:
+    from core.execution.alpaca_client import AlpacaClient as AlpacaEnhancedClient
+except Exception:  # fallback if you want to point to execution_engine version
+    from core.execution_engine.alpaca_executor import AlpacaExecutor as AlpacaEnhancedClient  # type: ignore

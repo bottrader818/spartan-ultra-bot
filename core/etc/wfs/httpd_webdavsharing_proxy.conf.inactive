@@ -1,0 +1,16 @@
+#
+# When active, this configures macOS Server to reverse proxy to WebDAV File Sharing
+#
+RewriteEngine On
+RewriteCond %{HTTP_COOKIE} WebDAVClient [OR]
+RewriteCond %{REQUEST_METHOD} (OPTIONS|PROPFIND)
+RewriteCond %{REQUEST_URI} !^/principals/.*
+RewriteCond %{REQUEST_URI} !^/calendars/.*
+RewriteCond %{REQUEST_URI} !^/addressbooks/.*
+RewriteCond %{REQUEST_URI} !^/.well-known/.*
+RewriteCond %{REQUEST_URI} !^/timezones/.*
+RewriteCond %{REQUEST_URI} !^/webcal/.*
+RewriteCond %{REQUEST_URI} !^/directory/.*
+RewriteCond %{REQUEST_URI} !^/svn/.*
+RewriteRule (.*) http://127.0.0.1:81$1 [P]
+ProxyPassReverse "/" http://127.0.0.1:81

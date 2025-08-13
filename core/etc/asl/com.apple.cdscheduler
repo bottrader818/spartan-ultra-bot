@@ -1,0 +1,6 @@
+# /etc/asl/com.apple.cdscheduler
+
+> cdscheduler.log format=std rotate=local ttl=3 all_max=2M compress
+
+? [= Sender com.apple.CDScheduler] file cdscheduler.log
+? [= Sender com.apple.CDScheduler] [> Level error] claim

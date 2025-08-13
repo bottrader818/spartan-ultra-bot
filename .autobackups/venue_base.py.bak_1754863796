@@ -1,0 +1,19 @@
+from abc import ABC, abstractmethod
+from typing import Dict, Any
+
+class ExecutionVenue(ABC):
+    """Minimal base API so tests can import and type-check."""
+    def __init__(self, name: str = "unknown"):
+        self.name = name
+
+    @abstractmethod
+    def send(self, order: Dict[str, Any]) -> Dict[str, Any]:
+        """Send an order to the venue and return a response dict."""
+        raise NotImplementedError
+
+    # Optional conveniences
+    def cancel(self, order_id: str) -> bool:
+        return False
+
+    def status(self, order_id: str) -> Dict[str, Any]:
+        return {"order_id": order_id, "status": "unknown"}

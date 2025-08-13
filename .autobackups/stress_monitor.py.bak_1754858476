@@ -1,0 +1,27 @@
+from enum import Enum
+
+class StressState(str, Enum):
+    NORMAL = "normal"
+    ELEVATED = "elevated"
+    CRITICAL = "critical"
+
+class MarketStressMonitor:
+    """Minimal shim; replace with real implementation if you have one."""
+    def __init__(self, threshold_elevated: float = 0.5, threshold_critical: float = 0.8):
+        self.th_e = threshold_elevated
+        self.th_c = threshold_critical
+
+    def score(self, metrics: dict) -> float:
+        # naive example: average a few metrics if present
+        keys = [k for k in ("volatility", "spread", "drawdown") if k in metrics]
+        if not keys:
+            return 0.0
+        return float(sum(metrics[k] for k in keys) / len(keys))
+
+    def state(self, metrics: dict) -> "StressState":
+        s = self.score(metrics)
+        if s >= self.th_c:
+            return StressState.CRITICAL
+        if s >= self.th_e:
+            return StressState.ELEVATED
+        return StressState.NORMAL

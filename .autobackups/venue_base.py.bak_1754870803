@@ -1,0 +1,28 @@
+from __future__ import annotations
+from dataclasses import dataclass
+from typing import Optional, Dict, Any, Protocol
+
+@dataclass
+class VenueQuote:
+    bid: float
+    ask: float
+    bid_size: float = 0.0
+    ask_size: float = 0.0
+    venue: Optional[str] = None
+    raw: Optional[Dict[str, Any]] = None
+
+@dataclass
+class VenueOrder:
+    symbol: str
+    side: str            # "buy" | "sell"
+    qty: float
+    type: str = "market" # market|limit
+    limit_price: Optional[float] = None
+    venue: Optional[str] = None
+    tif: str = "day"
+    meta: Optional[Dict[str, Any]] = None
+
+class ExecutionVenue(Protocol):
+    name: str
+    async def get_quote(self, symbol: str) -> VenueQuote: ...
+    async def submit(self, order: VenueOrder) -> Dict[str, Any]: ...

@@ -1,0 +1,156 @@
+# core/execution/alpaca_client.py
+from __future__ import annotations
+import time
+import threading
+import random
+import queue
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+
+from core.execution.base_executor import ValidationError
+
+
+@dataclass
+class Quote:
+    symbol: str
+    bid: float
+    ask: float
+    ts: float  # epoch seconds
+
+
+@dataclass
+class Order:
+    symbol: str
+    qty: int
+    side: str  # "buy" | "sell"
+    type: str  # e.g. "market" | "limit"
+    limit_price: Optional[float] = None
+    id: str = field(default_factory=str)
+
+
+class AlpacaEnhancedClient:
+    """
+    Minimal in-process simulator used by tests via the adapter at
+    core/execution/venues/alpaca_enhanced.py.
+
+    Exposes:
+      - start_market_data() / stop_market_data()
+      - get_quote(timeout)
+      - get_latency_ms()
+      - submit_order(Order)
+    """
+
+    def __init__(
+        self,
+        mode: str = "paper",
+        symbols: Optional[List[str]] = None,
+        telemetry: Optional[Any] = None,
+        chaos: bool = False,
+        quote_hz: int = 500,
+        max_latency_ms: int = 100,
+    ) -> None:
+        self.mode = mode
+        self.symbols = symbols or ["SPY"]
+        self.telemetry = telemetry
+        self.chaos = bool(chaos)
+        self.quote_hz = max(1, int(quote_hz))
+        self.max_latency_ms = int(max_latency_ms)
+
+        # state
+        self._orders: List[Order] = []
+        self._order_id_counter = 0
+
+        self._q: "queue.Queue[Quote]" = queue.Queue(maxsize=10_000)
+        self._md_running = threading.Event()
+        self._md_thread: Optional[threading.Thread] = None
+
+        # latency simulation
+        self._last_latency_ms = 2.0  # start small & sane
+
+        # price seeds per symbol
+        self._bases: Dict[str, float] = {s: 100.0 + random.random() for s in self.symbols}
+
+    # ---------------- Market Data ----------------
+    def start_market_data(self) -> None:
+        if self._md_thread and self._md_thread.is_alive():
+            return
+        self._md_running.set()
+        self._md_thread = threading.Thread(target=self._md_loop, daemon=True)
+        self._md_thread.start()
+
+    def stop_market_data(self) -> None:
+        self._md_running.clear()
+        if self._md_thread and self._md_thread.is_alive():
+            self._md_thread.join(timeout=1.0)
+
+    def _md_loop(self) -> None:
+        # aim ~quote_hz messages per second across all symbols
+        # distribute evenly by sending one symbol per tick
+        idx = 0
+        symbols = list(self.symbols)
+        tick = max(1.0 / self.quote_hz, 0.0005)
+        while self._md_running.is_set():
+            symbol = symbols[idx % len(symbols)]
+            idx += 1
+
+            base = self._bases[symbol]
+            # small random walk
+            base += random.uniform(-0.02, 0.02)
+            self._bases[symbol] = base
+            spread = max(0.01, abs(random.gauss(0.02, 0.01)))
+            bid = round(base - spread / 2, 4)
+            ask = round(base + spread / 2, 4)
+            ts = time.time()
+
+            # latency sim: mostly small, occasional chaos spikes
+            if self.chaos and random.random() < 0.02:
+                self._last_latency_ms = random.uniform(self.max_latency_ms * 1.5, self.max_latency_ms * 3.0)
+            else:
+                self._last_latency_ms = random.uniform(1.0, min(8.0, self.max_latency_ms * 0.25))
+
+            q = Quote(symbol=symbol, bid=bid, ask=ask, ts=ts)
+            try:
+                self._q.put(q, timeout=0.01)
+            except queue.Full:
+                # drop if overwhelmed; tests care about resilience, not drop-free feed
+                pass
+
+            time.sleep(tick)
+
+    def get_quote(self, timeout: Optional[float] = None) -> Optional[Quote]:
+        try:
+            return self._q.get(timeout=timeout if timeout is not None else 0.0)
+        except queue.Empty:
+            return None
+
+    def get_latency_ms(self) -> float:
+        return float(self._last_latency_ms)
+
+    # ---------------- Orders ----------------
+    def _next_order_id(self) -> str:
+        self._order_id_counter += 1
+        return f"alp-{self._order_id_counter:08d}"
+
+    def submit_order(self, order: Order) -> None:
+        # Basic validations to align with tests
+        if not order.symbol or order.symbol not in self.symbols:
+            raise ValidationError(f"Unknown or missing symbol: {order.symbol}")
+        if int(order.qty) <= 0:
+            raise ValidationError("Quantity must be positive")
+        if order.type.lower() == "limit" and order.limit_price is None:
+            raise ValidationError("Limit price required for limit orders")
+
+        if not order.id:
+            order.id = self._next_order_id()
+
+        # store order as 'accepted'
+        self._orders.append(order)
+
+    # --------------- Convenience ---------------
+    def reset(self) -> None:
+        # clear orders & queue; leave mode/symbols
+        self._orders.clear()
+        with self._q.mutex:
+            self._q.queue.clear()
+        self._order_id_counter = 0
+        self._last_latency_ms = 2.0

@@ -1,0 +1,5 @@
+> /private/var/log/keybagd.log soft compress format=bsd rotate=seq file_max=5M all_max=20M ttl=5
+? [= Sender keybagd] claim file keybagd.log
+? [= Sender kernel] [CA= Message AppleKeyStore] file keybagd.log
+? [= Sender UserEventAgent] [CS= Message LockStateNotifier] file keybagd.log
+? [= Sender kernel] [CA= Message AppleSEPKeyStore] file keybagd.log

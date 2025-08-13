@@ -1,0 +1,7 @@
+strategy:
+  type: trend_vol     # options: trend_vol, dtw_mean_rev
+  fast: 20
+  slow: 50
+  atr: 14
+  vol_target: 0.20
+  kelly_cap: 0.50

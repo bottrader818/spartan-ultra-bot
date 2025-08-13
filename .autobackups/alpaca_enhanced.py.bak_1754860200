@@ -1,0 +1,21 @@
+import importlib
+
+class AlpacaEnhancedClient:
+    """
+    Wrapper that adapts whatever is in core.execution.alpaca_client
+    to the name tests expect.
+    """
+    def __init__(self, *args, **kwargs):
+        mod = importlib.import_module("core.execution.alpaca_client")
+        # Try common class names
+        for name in ("AlpacaClient", "AlpacaAPI", "Client"):
+            cls = getattr(mod, name, None)
+            if isinstance(cls, type):
+                self._impl = cls(*args, **kwargs)
+                break
+        else:
+            # No class? delegate to the module itself
+            self._impl = mod
+
+    def __getattr__(self, item):
+        return getattr(self._impl, item)

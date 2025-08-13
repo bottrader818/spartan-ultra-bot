@@ -1,0 +1,36 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.4, pytest-8.4.1, pluggy-1.6.0 -- /Users/d.j.lewis/Documents/spartan-ultra-bot/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/d.j.lewis/Documents/spartan-ultra-bot
+plugins: xdist-3.8.0
+collecting ... collected 9 items
+
+tests/execution/test_adaptive_router.py::TestAdaptiveRouter::test_primary_routing ERROR [ 11%]
+
+==================================== ERRORS ====================================
+__________ ERROR at setup of TestAdaptiveRouter.test_primary_routing ___________
+
+    @pytest.fixture
+    def default_router():
+        """Production-equivalent router fixture"""
+>       return AdaptiveRouter(
+            venues=[
+                TestVenue("ALPACA", fill_rate=0.98, fee=0.0003),  # Best venue
+                TestVenue("SIM", fill_rate=0.95, fee=0.0002),     # Low fee
+                TestVenue("DARK", fill_rate=0.85, fee=0.0001)     # Fallback
+            ],
+            config={'max_latency_ms': 100}
+        )
+E       TypeError: SmartOrderRouter.__init__() got an unexpected keyword argument 'venues'
+
+tests/execution/test_adaptive_router.py:35: TypeError
+=============================== warnings summary ===============================
+tests/execution/test_adaptive_router.py:14
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/execution/test_adaptive_router.py:14: PytestCollectionWarning: cannot collect test class 'TestVenue' because it has a __init__ constructor (from: tests/execution/test_adaptive_router.py)
+    class TestVenue(ExecutionVenue):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/execution/test_adaptive_router.py::TestAdaptiveRouter::test_primary_routing - TypeError: SmartOrderRouter.__init__() got an unexpected keyword argument 'venues'
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+========================= 1 warning, 1 error in 0.07s ==========================

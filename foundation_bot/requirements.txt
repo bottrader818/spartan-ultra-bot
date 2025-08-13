@@ -1,0 +1,5 @@
+numpy
+pandas
+yfinance
+python-dotenv
+alpaca-trade-api>=3.1

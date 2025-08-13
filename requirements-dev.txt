@@ -1,0 +1,6 @@
+watchdog
+pytest
+pytest-xdist
+pylint
+libcst
+memory_profiler

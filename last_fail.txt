@@ -1,0 +1,96 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.4, pytest-8.4.1, pluggy-1.6.0 -- /Users/d.j.lewis/Documents/spartan-ultra-bot/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/d.j.lewis/Documents/spartan-ultra-bot
+plugins: xdist-3.8.0
+collecting ... collected 115 items
+
+tests/execution/test_adaptive_router.py::TestAdaptiveRouter::test_primary_routing ERROR [  0%]
+
+==================================== ERRORS ====================================
+__________ ERROR at setup of TestAdaptiveRouter.test_primary_routing ___________
+
+    @pytest.fixture
+    def default_router():
+        """Production-equivalent router fixture"""
+>       return AdaptiveRouter(
+            venues=[
+                TestVenue("ALPACA", fill_rate=0.98, fee=0.0003),  # Best venue
+                TestVenue("SIM", fill_rate=0.95, fee=0.0002),     # Low fee
+                TestVenue("DARK", fill_rate=0.85, fee=0.0001)     # Fallback
+            ],
+            config={'max_latency_ms': 100}
+        )
+E       TypeError: SmartOrderRouter.__init__() got an unexpected keyword argument 'venues'
+
+tests/execution/test_adaptive_router.py:35: TypeError
+=============================== warnings summary ===============================
+tests/execution/test_adaptive_router.py:14
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/execution/test_adaptive_router.py:14: PytestCollectionWarning: cannot collect test class 'TestVenue' because it has a __init__ constructor (from: tests/execution/test_adaptive_router.py)
+    class TestVenue(ExecutionVenue):
+
+tests/execution/test_alpaca_client.py:96
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/execution/test_alpaca_client.py:96: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/execution/test_alpaca_client.py:116
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/execution/test_alpaca_client.py:116: PytestUnknownMarkWarning: Unknown pytest.mark.stress - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.stress
+
+tests/execution/test_alpaca_client.py:117
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/execution/test_alpaca_client.py:117: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/execution/test_alpaca_client.py:139
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/execution/test_alpaca_client.py:139: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/execution/test_alpaca_client.py:197
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/execution/test_alpaca_client.py:197: PytestUnknownMarkWarning: Unknown pytest.mark.stress - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.stress
+
+tests/execution/test_alpaca_client.py:198
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/execution/test_alpaca_client.py:198: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/execution/test_alpaca_client.py:236
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/execution/test_alpaca_client.py:236: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/execution/test_alpaca_client.py:270
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/execution/test_alpaca_client.py:270: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/execution/test_alpaca_client.py:288
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/execution/test_alpaca_client.py:288: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration
+
+tests/execution/test_alpaca_client.py:301
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/execution/test_alpaca_client.py:301: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/execution/test_alpaca_client.py:318
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/execution/test_alpaca_client.py:318: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/infrastructure/test_performance_analyzer.py:94
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/infrastructure/test_performance_analyzer.py:94: PytestUnknownMarkWarning: Unknown pytest.mark.benchmark - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.benchmark
+
+tests/risk/test_stress_monitor.py:219
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/risk/test_stress_monitor.py:219: PytestUnknownMarkWarning: Unknown pytest.mark.stress - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.stress
+
+tests/risk/test_stress_monitor.py:262
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/risk/test_stress_monitor.py:262: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration
+
+tests/risk/test_stress_monitor.py:271
+  /Users/d.j.lewis/Documents/spartan-ultra-bot/tests/risk/test_stress_monitor.py:271: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/execution/test_adaptive_router.py::TestAdaptiveRouter::test_primary_routing - TypeError: SmartOrderRouter.__init__() got an unexpected keyword argument 'venues'
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+======================== 16 warnings, 1 error in 5.39s =========================

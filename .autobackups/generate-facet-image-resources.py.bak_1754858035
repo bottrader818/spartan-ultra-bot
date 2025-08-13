@@ -1,0 +1,135 @@
+# Runs over "Images.xcassets" generating the resources enums recursively
+import os
+
+
+########## Helpers ###############
+
+# [Helper] - Function responsible for finding resource paths
+def is_resource_folder(folder_path):
+    has_imageset = False
+    for item in os.listdir(folder_path):
+       if item.endswith(".imageset"):
+          has_imageset = True 
+    return has_imageset
+
+# [Helper] - Function responsible for counting the spacings per level
+def spacing(level):
+    spacing = ""
+    if level > 0:
+        i = 0
+        while i < level:
+            spacing += "    "
+            i += 1
+    return spacing
+
+# [Helper] - Some files starts with numbers and others are using reserved words that don't compile in swift
+def filterVariableName(title):
+    reserved_words = ["switch", "case", "default", "struct", "enum", "class",  "protocol", "extension", "while", "for"]
+    switcher = {
+        0: "zero",
+        1: "one",
+        2: "two",
+        3: "three",
+        4: "four",
+        5: "five",
+        6: "six",
+        7: "seven",
+        8: "eight",
+        9: "nine",
+    }
+    title = formatt(title)
+    for word in reserved_words:
+        if title == word:
+            title = f"`{title}`"
+
+    if title[0].isdigit():
+        number = int(title[0])
+        title = switcher.get(number, "undefined") + title[1:]
+    return title
+
+# [Helper] - Remove all special characters from string
+def formatt(title):
+    title = title.split(".")[0]
+    return ''.join(letter for letter in title if letter.isalnum())
+
+################################
+
+###### Enuns Generation ########
+
+# Recursive function responsible to create enums and the following sub enums
+def create_enum_for(level, folder_path, foldername, outfile):
+    if is_resource_folder(folder_path):
+        create_resource_enum_for(level, folder_path, foldername, outfile)
+    else:
+        foldername = formatt(foldername.title())
+        prefix = "BUSAsset" if level == 0 else ""
+        print(f"Creating main enum: {prefix}{foldername.capitalize()}")
+        outfile.write(f"{spacing(level)}// MARK: - {foldername}s\n")  # Category comment
+        outfile.write(f"{spacing(level)}public enum {prefix}{foldername.capitalize()}: FacetImageResource {{\n")
+        # Write the inner enums
+        for item in os.listdir(folder_path):
+            new_folder_path = os.path.join(folder_path, item)
+            if os.path.isdir(new_folder_path):
+               new_level = level + 1
+               create_enum_for(new_level, new_folder_path, item, outfile)
+               case_name = item[0].lower() + item[1:]
+               outfile.write(f"{spacing(level)}    case {case_name}({item.capitalize()})\n\n")
+        # Write the FacetImageResource resource variable
+        outfile.write(f"{spacing(level)}    public var resource: String {{\n")
+        outfile.write(f"{spacing(level)}        switch self {{\n")
+        for item in os.listdir(folder_path):
+             new_folder_path = os.path.join(folder_path, item)
+             if os.path.isdir(new_folder_path):
+               case_name = item[0].lower() + item[1:]
+               outfile.write(f"{spacing(level)}            case .{case_name}(let item): \n")
+               outfile.write(f"{spacing(level)}                item.resource\n")
+        outfile.write(f"{spacing(level)}        }}\n")
+        outfile.write(f"{spacing(level)}    }}\n")
+        outfile.write(f"{spacing(level)}}}\n\n")
+# Function responsible for creating the resources enums containing the variables
+def create_resource_enum_for(level, folder_path, foldername, outfile):
+    enum_name = formatt(foldername.title())
+    prefix = "BUSAsset" if level == 0 else ""
+    print(f"Creating resource enum: {prefix}{enum_name}")
+    outfile.write(f"{spacing(level)}// MARK: - {enum_name}s\n")  # Category comment
+    outfile.write(f"{spacing(level)}public enum {prefix}{enum_name}: String, CaseIterable, FacetImageResource {{\n")
+    for filename in os.listdir(folder_path):
+        if filename.endswith(".imageset"):
+            item_path = os.path.join(folder_path, filename)
+            name_without_ext = formatt(filename.title())
+            enum_case_name = name_without_ext[0].lower() + name_without_ext[1:]
+            enum_case_name = filterVariableName(enum_case_name)
+            outfile.write(f"{spacing(level)}    case {enum_case_name} = \"{os.path.relpath(item_path, root_folder).split('.')[0]}\"\n")
+    outfile.write(f"\n{spacing(level)}    public var resource: String {{\n")
+    outfile.write(f"{spacing(level)}        self.rawValue\n")
+    outfile.write(f"{spacing(level)}    }}\n")
+    outfile.write(f"{spacing(level)}}}\n\n")  # Extra newline between enums
+
+# The main function responsible for the File Creation
+def create_image_resources(root_folder, output_directory):
+    output_filename = os.path.join(output_directory, "FacetImageResources.swift")  # Conenum full path
+    with open(output_filename, "w") as outfile:
+        outfile.write(f"// Generated file\n") 
+        outfile.write(f"// If you want to add any image, please:\n") 
+        outfile.write(f"//   1 - Add your files under Facet/Assets/Images.xcassets\n") 
+        outfile.write(f"//   2 - Open your terminal and run: > python3 generate-facet-image-resources.py\n\n") 
+        outfile.write(f"// This protocol helps to use the enums to generate images, consult Image+Resources\n")
+        outfile.write(f"public protocol FacetImageResource {{\n")
+        outfile.write("    var resource: String { get }\n")
+        outfile.write(f"}}\n\n")
+        for foldername in os.listdir(root_folder):
+            folder_path = os.path.join(root_folder, foldername)
+            if os.path.isdir(folder_path):
+               create_enum_for(0, folder_path, foldername, outfile)
+        print("\n\nSuccess ✅")
+
+if __name__ == "__main__":
+    output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Classes", "Resources"))
+    root_folder = "Images.xcassets"
+    try:
+        os.makedirs(output_dir, exist_ok=True)  # Create if doesn't exist
+        create_image_resources(root_folder, output_dir)
+    except PermissionError:
+        print(f"Error: Insufficient permissions to write to {output_dir}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
